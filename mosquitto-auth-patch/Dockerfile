@@ -16,13 +16,13 @@ WORKDIR /root
 RUN apt update && \
     apt upgrade -y && \
     apt -y install gcc g++ make git wget libssl-dev libcurl4-openssl-dev libc-ares-dev uuid-dev libwebsockets-dev && \
-    wget https://github.com/eclipse/mosquitto/archive/v1.4.15.tar.gz && \
-    tar xfz v1.4.15.tar.gz 
+    wget https://github.com/eclipse/mosquitto/archive/v1.5.tar.gz && \
+    tar xfz v1.5.tar.gz 
 
 # build mosquitto
-WORKDIR /root/mosquitto-1.4.15
-RUN make WITH_WEBSOCKETS=yes WITH_DOCS=no DESTDIR=/opt/mosquitto && \
-    make install WITH_WEBSOCKETS=yes WITH_DOCS=no DESTDIR=/opt/mosquitto && \
+WORKDIR /root/mosquitto-1.5
+RUN make WITH_WEBSOCKETS=yes WITH_DOCS=no WITH_STATIC_LIBRARIES=yes DESTDIR=/opt/mosquitto && \
+    make install WITH_WEBSOCKETS=yes WITH_DOCS=no WITH_STATIC_LIBRARIES=yes DESTDIR=/opt/mosquitto && \
     rm -rf /opt/mosquitto/etc/*
 COPY mosquitto.conf /opt/mosquitto/etc/
 

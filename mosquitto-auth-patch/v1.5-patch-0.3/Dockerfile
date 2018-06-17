@@ -25,7 +25,7 @@ RUN make WITH_WEBSOCKETS=yes WITH_DOCS=no WITH_STATIC_LIBRARIES=yes DESTDIR=/opt
 
 # build auth plug
 # default tag to pull from https://github.com/robymus/mosquitto-auth-plug.git
-ENV AUTH_PLUG_TAG=ip-patch-v0.2
+ENV AUTH_PLUG_TAG=ip-patch-v0.3
 WORKDIR /root
 RUN git clone --depth 1 --branch $AUTH_PLUG_TAG https://github.com/robymus/mosquitto-auth-plug.git mosquitto-auth-plug
 WORKDIR /root/mosquitto-auth-plug

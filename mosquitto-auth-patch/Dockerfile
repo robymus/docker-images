@@ -7,8 +7,6 @@
 # Multistage build
 #
 FROM debian:9.4 AS build
-# default tag to pull from https://github.com/robymus/mosquitto-auth-plug.git
-ENV AUTH_PLUG_TAG=orig-20180616
 
 WORKDIR /root
 
@@ -24,15 +22,19 @@ WORKDIR /root/mosquitto-1.5
 RUN make WITH_WEBSOCKETS=yes WITH_DOCS=no WITH_STATIC_LIBRARIES=yes DESTDIR=/opt/mosquitto && \
     make install WITH_WEBSOCKETS=yes WITH_DOCS=no WITH_STATIC_LIBRARIES=yes DESTDIR=/opt/mosquitto && \
     rm -rf /opt/mosquitto/etc/*
-COPY mosquitto.conf /opt/mosquitto/etc/
 
 # build auth plug
+# default tag to pull from https://github.com/robymus/mosquitto-auth-plug.git
+ENV AUTH_PLUG_TAG=ip-patch-v0.1
 WORKDIR /root
 RUN git clone --depth 1 --branch $AUTH_PLUG_TAG https://github.com/robymus/mosquitto-auth-plug.git mosquitto-auth-plug
 WORKDIR /root/mosquitto-auth-plug
 COPY mosquitto-auth-plug-config.mk config.mk
 RUN make && \
     cp auth-plug.so /opt/mosquitto/
+
+# copy default config
+COPY mosquitto.conf /opt/mosquitto/etc/
 
 #
 # Create final image
